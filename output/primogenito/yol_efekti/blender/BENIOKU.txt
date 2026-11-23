@@ -1,0 +1,33 @@
+ARAÇ YOL YEŞİL ÇİZGİLER — BLENDER PROJESİ
+==========================================
+
+Dosya: arac_yol_yesil_cizgiler.blend   (Blender 5.3 ile oluşturuldu; Blender 4.2+ ile de açılması beklenir)
+
+KURULUM
+1) Orijinal tır videonuzu (efektsiz hâli, 1080x1920, 30fps, 5,7 sn) bu .blend dosyasıyla AYNI KLASÖRE koyun
+   ve adını  arac_kaynak.mp4  yapın.
+2) .blend dosyasını açın. Kamera görünümünde (Numpad 0) videonuz ve yeşil çizgiler görünür.
+3) Render > Render Animation (Ctrl+F12). Çıktı:  render/arac_yol_yesil_cizgiler_*.mp4  (H.264)
+
+SAHNE YAPISI
+- Kamera: ortografik, 1080x1920'yi birebir kaplar (1 Blender birimi = 100 piksel).
+- "Video" koleksiyonu: videonuzun oynadığı düzlem (emission malzeme, sRGB).
+- "Isik_Cizgileri" koleksiyonu:
+    * Cizgi_00 … Cizgi_45  : 46 ışık çizgisi. Konum ve kalınlık her karede anahtar kareli
+                              (yolun akış yönü/hızı ve tekerleklerin yere değdiği hat videodan ölçüldü).
+    * Alt_Isik             : tekerleklerin yere değdiği hattı takip eden yeşil alt ışıma (underglow).
+- Malzemeler: Cizgi_Yesil / Cizgi_Mint / Cizgi_Beyaz (renkleri buradan değiştirebilirsiniz),
+              Alt_Isik_Mat (yoğunluk: "Multiply" düğümündeki 0.30 değeri).
+- İlk 0,35 sn'de (kare 1–11) çizgiler yumuşakça belirir (Emission Strength anahtar kareleri).
+
+KOMPOZİTÖR
+- İki görünüm katmanı (View Layer): "Video" ve "Isiklar".
+- Isiklar  →  Glare (Fog Glow)  →  Mix (Screen) ile videonun üstüne.
+- Parlamayı artırmak/azaltmak için Glare düğümündeki "Strength" ve "Size" değerlerini değiştirin.
+
+NOTLAR
+- Render motoru Cycles olarak ayarlı (test edilen motor). Sahne sadece ışık yayan düzlemlerden oluştuğu için
+  hızlı render alır. İsterseniz EEVEE'ye geçebilirsiniz.
+- kaynak_kod/ klasöründeki build_blend.py bu projeyi baştan üretir:
+    python3 build_blend.py cikti.blend arac_kaynak.mp4      (Python'da 'bpy' modülü kurulu olmalı)
+  streaks.py içinde çizgi sayısı, hızları ve yer hattı değerleri bulunur.
